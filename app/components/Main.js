@@ -12,23 +12,16 @@ var apiKey = process.env.NYT_API || keys.nytApi.key;
 
 var Main = React.createClass({
   getInitialState: function() {
-    return { search: "", startYear: "", endYear: "", searchResult: [] }
+    return { search: "", startYear: "", endYear: "", searchResults: [], showResults: false }
   },
   componentDidUpdate: function(prevProps, prevState) {
     if (prevState.search !== this.state.search) {
-      console.log("UPDATED");
-      console.log(this.state.search);
-      console.log(this.state.startYear);
-      console.log(this.state.endYear);
-
       this.runSearch(this.state.search, this.state.startYear, this.state.endYear);
-    }
-    if (prevState.searchResult !== this.state.searchResult) {
-      console.log(this.state.searchResult);
+      this.setState({ showResults: true });
     }
   },
   runSearch: function(search, startYear, endYear) {
-    var searchResult = [];
+    var searchResults = [];
     var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
     url += '?' + $.param({
       'api-key': apiKey,
@@ -41,9 +34,9 @@ var Main = React.createClass({
       method: 'GET',
     }).done(function(result) {
       for (var i = 0; i < 5; i++) {
-        searchResult.push(result.response.docs[i]);
+        searchResults.push(result.response.docs[i]);
       }
-      this.setState({ searchResult: searchResult });
+      this.setState({ searchResults: searchResults });
     }.bind(this)).fail(function(err) {
       throw err;
     });
@@ -69,11 +62,9 @@ var Main = React.createClass({
         </div>
         <div className="row">
           <Route exact path="/" render={(props) => (<Search {...props} setVars={this.setVars} />)} />
+          { this.state.showResults ? <Results searchResults={this.state.searchResults} /> : null }
           <Route path="/saved" component={Saved} />
         </div> 
-        <div className="row">
-          <Results />
-        </div>
       </div>
     );
   }
