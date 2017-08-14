@@ -8,17 +8,17 @@ var request = require('request');
 var keys = require("../keys.js");
 var apiKey = process.env.NYT_API || keys.nytApi.key;
 
-router.get("/api/search", function(req, res) {
-  request.get({
-    url: "https://api.nytimes.com/svc/search/v2/articlesearch.json",
-    qs: {
-      'api-key': apiKey
-    },
-  }, function(err, response, body) {
-    body = JSON.parse(body);
-    console.log(body.response.docs);
-  });
-});
+// router.post("/api/search", function(req, res) {
+//   request.get({
+//     url: req.body.url,
+//     qs: {
+//       'api-key': apiKey
+//     },
+//   }, function(err, response, body) {
+//     body = JSON.parse(body);
+//     res.send(body.response.docs);
+//   });
+// });
 
 router.get("/api/saved", function(req, res) {
 

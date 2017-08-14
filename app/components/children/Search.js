@@ -56,7 +56,6 @@ var Search = React.createClass({
                 />
               </div>
               <button type="submit" className="btn btn-default" id="run-search"><i className="fa fa-search"></i> Search</button>
-              <button type="button" className="btn btn-default" id="clear-all"><i className="fa fa-trash"></i> Clear Results</button>
             </form>
           </div>
         </div>
