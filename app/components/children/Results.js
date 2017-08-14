@@ -4,6 +4,7 @@ var Results = React.createClass({
     
   handleSave: function(result) {
     console.log(result);
+    this.props.saveArticle(result);
   },
   render: function() {
     return (

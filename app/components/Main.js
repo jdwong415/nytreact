@@ -41,6 +41,17 @@ var Main = React.createClass({
       throw err;
     });
   },
+  saveArticle: function(data) {
+    var newArticle = {
+      title: data.headline.main,
+      date: data.pub_date,
+      url: data.web_url,
+      summary: data.snippet
+    }
+    $.post("/api/saved", newArticle, function(res) {
+      console.log(res);
+    });
+  },
   setVars: function(search, startYear, endYear) {
     this.setState({ search: search, startYear: startYear, endYear: endYear });
   },
@@ -62,8 +73,8 @@ var Main = React.createClass({
         </div>
         <div className="row">
           <Route exact path="/" render={(props) => (<Search {...props} setVars={this.setVars} />)} />
-          { this.state.showResults ? <Results searchResults={this.state.searchResults} /> : null }
           <Route path="/saved" component={Saved} />
+          { this.state.showResults ? <Results searchResults={this.state.searchResults} saveArticle={this.saveArticle} /> : null }
         </div> 
       </div>
     );

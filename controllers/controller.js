@@ -25,7 +25,16 @@ router.get("/api/saved", function(req, res) {
 });
 
 router.post("/api/saved", function(req, res) {
-
+  var newArticle = req.body;
+  newArticle = Article(newArticle);
+  newArticle.save(function(err) {
+    if (err) {
+      console.log(err);
+    }
+    else {
+      console.log("Article saved");
+    }
+  });
 });
 
 router.delete("/api/saved", function(req, res) {

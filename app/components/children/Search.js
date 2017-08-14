@@ -36,7 +36,7 @@ var Search = React.createClass({
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="start-year">Start Year (Optional):</label>
+                <label htmlFor="start-year">Start Year:</label>
                 <input
                   value={this.state.startYear}
                   type="number"
@@ -46,7 +46,7 @@ var Search = React.createClass({
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="end-year">End Year (Optional):</label>
+                <label htmlFor="end-year">End Year:</label>
                 <input
                   value={this.state.endYear}
                   type="number"
