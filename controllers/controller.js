@@ -3,7 +3,6 @@ var router = express.Router();
 var Article = require('../models/article');
 var Comment = require('../models/comment');
 var path = require('path');
-var request = require('request');
 
 var keys = require("../keys.js");
 var apiKey = process.env.NYT_API || keys.nytApi.key;
@@ -29,7 +28,6 @@ router.post("/api/saved", function(req, res) {
 });
 
 router.delete("/api/saved", function(req, res) {
-  console.log(req.body);
   Article.findByIdAndRemove({ _id: req.body._id }, function(err, doc) {
     if (err) console.log(err);
     else res.send(doc);

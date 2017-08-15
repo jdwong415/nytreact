@@ -71,7 +71,6 @@ var Main = React.createClass({
     }.bind(this));
   },
   setVars: function(search, startYear, endYear) {
-    console.log(search, startYear, endYear);
     this.setState({ search: search, startYear: startYear, endYear: endYear });
   },
   render: function() {
