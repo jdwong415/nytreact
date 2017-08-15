@@ -12,10 +12,12 @@ var apiKey = process.env.NYT_API || keys.nytApi.key;
 
 var Main = React.createClass({
   getInitialState: function() {
-    return { search: "", startYear: "", endYear: "", searchResults: [], showResults: false }
+    return { search: "", startYear: "", endYear: "", searchResults: [], showResults: false, savedArticles: [] }
   },
   componentDidUpdate: function(prevProps, prevState) {
-    if (prevState.search !== this.state.search) {
+    if (prevState.search !== this.state.search ||
+        prevState.startYear !== this.state.startYear ||
+        prevState.endYear !== this.state.endYear) {
       this.runSearch(this.state.search, this.state.startYear, this.state.endYear);
       this.setState({ showResults: true });
     }
@@ -33,8 +35,10 @@ var Main = React.createClass({
       url: url,
       method: 'GET',
     }).done(function(result) {
-      for (var i = 0; i < 5; i++) {
-        searchResults.push(result.response.docs[i]);
+      if (result.response.docs.length > 0) {
+        for (var i = 0; i < 5; i++) {
+          searchResults.push(result.response.docs[i]);
+        }
       }
       this.setState({ searchResults: searchResults });
     }.bind(this)).fail(function(err) {
@@ -49,10 +53,25 @@ var Main = React.createClass({
       summary: data.snippet
     }
     $.post("/api/saved", newArticle, function(res) {
-      console.log(res);
-    });
+      this.getArticle();
+    }.bind(this));
+  },
+  getArticle: function() {
+    $.get("/api/saved", function(res) {
+      this.setState({ savedArticles: res });
+    }.bind(this));
+  },
+  deleteArticle: function(data) {
+    $.ajax({
+      url: "/api/saved",
+      type: "DELETE",
+      data: data
+    }).done(function() {
+      this.getArticle();
+    }.bind(this));
   },
   setVars: function(search, startYear, endYear) {
+    console.log(search, startYear, endYear);
     this.setState({ search: search, startYear: startYear, endYear: endYear });
   },
   render: function() {
@@ -73,7 +92,7 @@ var Main = React.createClass({
         </div>
         <div className="row">
           <Route exact path="/" render={(props) => (<Search {...props} setVars={this.setVars} />)} />
-          <Route path="/saved" component={Saved} />
+          <Route path="/saved" render={(props) => (<Saved {...props} savedArticles={this.state.savedArticles} getArticle={this.getArticle} deleteArticle={this.deleteArticle} />)} />
           { this.state.showResults ? <Results searchResults={this.state.searchResults} saveArticle={this.saveArticle} /> : null }
         </div> 
       </div>

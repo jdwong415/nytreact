@@ -8,20 +8,11 @@ var request = require('request');
 var keys = require("../keys.js");
 var apiKey = process.env.NYT_API || keys.nytApi.key;
 
-// router.post("/api/search", function(req, res) {
-//   request.get({
-//     url: req.body.url,
-//     qs: {
-//       'api-key': apiKey
-//     },
-//   }, function(err, response, body) {
-//     body = JSON.parse(body);
-//     res.send(body.response.docs);
-//   });
-// });
-
 router.get("/api/saved", function(req, res) {
-
+  Article.find({}).exec(function(err, doc) {
+    if (err) console.log(err);
+    else res.send(doc);
+  });
 });
 
 router.post("/api/saved", function(req, res) {
@@ -38,7 +29,11 @@ router.post("/api/saved", function(req, res) {
 });
 
 router.delete("/api/saved", function(req, res) {
-
+  console.log(req.body);
+  Article.findByIdAndRemove({ _id: req.body._id }, function(err, doc) {
+    if (err) console.log(err);
+    else res.send(doc);
+  });
 });
 
 router.get("*", function(req, res, next) {

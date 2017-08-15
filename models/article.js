@@ -16,10 +16,6 @@ var articleSchema = new Schema({
   summary: {
     type: String
   },
-  saved: {
-    type: Boolean,
-    default: false
-  },
   comments: [{
     type: Schema.Types.ObjectId,
     ref: "Comment"
