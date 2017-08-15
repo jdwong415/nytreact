@@ -13,7 +13,7 @@ var Saved = React.createClass({
     if (nextProps.savedArticles.length === 0) {
       displayResults.push(
         <div className="well" key="0">
-          <h4 className="text-center">No saved articles found.</h4>
+          <h4 className="text-center">No saved articles.</h4>
         </div>
       );
     }
