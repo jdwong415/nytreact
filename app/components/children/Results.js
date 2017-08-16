@@ -6,6 +6,7 @@ var Results = React.createClass({
     return { displayResults: [] }
   },
   componentWillReceiveProps: function(nextProps) {
+    // Check if search results is empty or not and display accordingly
     var displayResults = [];
     if (nextProps.searchResults) {
       if (nextProps.searchResults.length === 0) {
@@ -33,6 +34,7 @@ var Results = React.createClass({
     }
   },
   handleSave: function(result) {
+    // Save article
     this.props.saveArticle(result);
   },
   render: function() {

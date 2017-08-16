@@ -14,6 +14,7 @@ var Main = React.createClass({
     return { search: "", startYear: "", endYear: "", searchResults: [], savedArticles: [] }
   },
   componentDidUpdate: function(prevProps, prevState) {
+    // If state changed search for articles
     if (prevState.search !== this.state.search ||
         prevState.startYear !== this.state.startYear ||
         prevState.endYear !== this.state.endYear) {
@@ -21,6 +22,7 @@ var Main = React.createClass({
     }
   },
   runSearch: function(search, startYear, endYear) {
+    // Search NYTimes API for articles
     var searchResults = [];
     var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
     url += '?' + $.param({
@@ -44,6 +46,7 @@ var Main = React.createClass({
     });
   },
   saveArticle: function(data) {
+    // Save article to database
     var newArticle = {
       title: data.headline.main,
       date: data.pub_date,
@@ -56,11 +59,13 @@ var Main = React.createClass({
     }.bind(this));
   },
   getArticle: function() {
+    // Get all saved articles from database
     $.get("/api/saved", function(res) {
       this.setState({ savedArticles: res });
     }.bind(this));
   },
   deleteArticle: function(data) {
+    // Delete article from database
     $.ajax({
       url: "/api/saved",
       type: "DELETE",
@@ -70,9 +75,11 @@ var Main = React.createClass({
     }.bind(this));
   },
   setVars: function(search, startYear, endYear) {
+    // Set new states
     this.setState({ search: search, startYear: startYear, endYear: endYear });
   },
   setSearchResults: function(data) {
+    // Remove saved articles from results display
     var newArr = [];
     this.state.searchResults.forEach(function(val) {
       if (val.web_url != data.url) {
@@ -98,14 +105,14 @@ var Main = React.createClass({
           </div>
         </div>
         <div className="row">
-          <Route exact path="/" render={(props) => (
+          <Route path="/" render={(props) => (
             <Search {...props}
               setVars={this.setVars}
               searchResults={this.state.searchResults}
               saveArticle={this.saveArticle}
             />
           )} />
-          <Route path="/saved" render={(props) => (
+          <Route exact path="/saved" render={(props) => (
             <Saved {...props}
               savedArticles={this.state.savedArticles}
               getArticle={this.getArticle}

@@ -8,13 +8,14 @@ var Search = React.createClass({
     return { search: "", startYear: "", endYear: "", showResults: false };
   },
   handleChange: function(event) {
+    // Set state to value inputted
     var state = {};
     state[event.target.id] = event.target.value;
     this.setState(state);
   },
   handleSubmit: function(event) {
+    // On submit pass states to main
     event.preventDefault();
-    console.log(this.state.startYear);
     this.props.setVars(this.state.search, this.state.startYear, this.state.endYear);
     this.setState({ search: "", startYear: "", endYear: "" });
     this.setState({ showResults: true });

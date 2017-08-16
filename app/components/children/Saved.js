@@ -6,9 +6,11 @@ var Saved = React.createClass({
     return { displayResults: [] }
   },
   componentDidMount: function() {
+    // Display saved articles
     this.props.getArticle();
   },
   componentWillReceiveProps: function(nextProps) {
+    // Check if saved articles exist and display accordingly
     var displayResults = [];
     if (nextProps.savedArticles.length === 0) {
       displayResults.push(
@@ -34,6 +36,7 @@ var Saved = React.createClass({
     this.setState({ displayResults: displayResults });
   },
   handleClick: function(result) {
+    // Remove article from saved
     this.props.deleteArticle(result);
   },
   render: function() {
