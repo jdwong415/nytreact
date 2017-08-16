@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var Article = require('../models/article');
-var Comment = require('../models/comment');
 var path = require('path');
 
 var keys = require("../keys.js");

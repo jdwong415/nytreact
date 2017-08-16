@@ -25,9 +25,6 @@ var Saved = React.createClass({
             <button className="btn btn-default save-button" type="button" onClick={this.handleClick.bind(this, res)}>
               <i className="fa fa-trash-o" aria-hidden="true"></i> Remove
             </button>
-            <button className="btn btn-default comment-button" type="button" value="true">
-              <i className="fa fa-commenting-o" aria-hidden="true"></i> Comment
-            </button> 
             <p className="summary">{res.summary}</p>
           </div>
         );
