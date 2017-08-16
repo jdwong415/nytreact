@@ -25,6 +25,7 @@ var Saved = React.createClass({
             <button className="btn btn-default save-button" type="button" onClick={this.handleClick.bind(this, res)}>
               <i className="fa fa-trash-o" aria-hidden="true"></i> Remove
             </button>
+            <p className="author">{res.author} &bull; {moment(res.date).format("MMMM D, YYYY")}</p>
             <p className="summary">{res.summary}</p>
           </div>
         );

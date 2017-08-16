@@ -24,3 +24,12 @@
   margin-top: 3px;
   margin-left: 10px;
 }
+
+.author, .date {
+  color: gray;
+  font-size: 12px;
+}
+
+footer {
+  padding: 20px;
+}

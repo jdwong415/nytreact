@@ -5,21 +5,19 @@ var Route = router.Route;
 
 var Search = require("./children/Search");
 var Saved = require("./children/Saved");
-var Results = require("./children/Results");
 
 var keys = require("../../keys.js");
 var apiKey = process.env.NYT_API || keys.nytApi.key;
 
 var Main = React.createClass({
   getInitialState: function() {
-    return { search: "", startYear: "", endYear: "", searchResults: [], showResults: false, savedArticles: [] }
+    return { search: "", startYear: "", endYear: "", searchResults: [], savedArticles: [] }
   },
   componentDidUpdate: function(prevProps, prevState) {
     if (prevState.search !== this.state.search ||
         prevState.startYear !== this.state.startYear ||
         prevState.endYear !== this.state.endYear) {
       this.runSearch(this.state.search, this.state.startYear, this.state.endYear);
-      this.setState({ showResults: true });
     }
   },
   runSearch: function(search, startYear, endYear) {
@@ -28,8 +26,8 @@ var Main = React.createClass({
     url += '?' + $.param({
       'api-key': apiKey,
       'q': search,
-      'begin_date': startYear + "0101",
-      'end_date': endYear + "0101"
+      'begin_date': startYear,
+      'end_date': endYear
     });
     $.ajax({
       url: url,
@@ -50,10 +48,11 @@ var Main = React.createClass({
       title: data.headline.main,
       date: data.pub_date,
       url: data.web_url,
-      summary: data.snippet
+      summary: data.snippet,
+      author: data.byline.original
     }
     $.post("/api/saved", newArticle, function(res) {
-      this.getArticle();
+      this.setSearchResults(newArticle);
     }.bind(this));
   },
   getArticle: function() {
@@ -73,6 +72,15 @@ var Main = React.createClass({
   setVars: function(search, startYear, endYear) {
     this.setState({ search: search, startYear: startYear, endYear: endYear });
   },
+  setSearchResults: function(data) {
+    var newArr = [];
+    this.state.searchResults.forEach(function(val) {
+      if (val.web_url != data.url) {
+        newArr.push(val);
+      }
+    });
+    this.setState({ searchResults: newArr });
+  },
   render: function() {
     return (
       <div className="container">
@@ -90,10 +98,21 @@ var Main = React.createClass({
           </div>
         </div>
         <div className="row">
-          <Route exact path="/" render={(props) => (<Search {...props} setVars={this.setVars} />)} />
-          <Route path="/saved" render={(props) => (<Saved {...props} savedArticles={this.state.savedArticles} getArticle={this.getArticle} deleteArticle={this.deleteArticle} />)} />
-          { this.state.showResults ? <Results searchResults={this.state.searchResults} saveArticle={this.saveArticle} /> : null }
-        </div> 
+          <Route exact path="/" render={(props) => (
+            <Search {...props}
+              setVars={this.setVars}
+              searchResults={this.state.searchResults}
+              saveArticle={this.saveArticle}
+            />
+          )} />
+          <Route path="/saved" render={(props) => (
+            <Saved {...props}
+              savedArticles={this.state.savedArticles}
+              getArticle={this.getArticle}
+              deleteArticle={this.deleteArticle}
+            />
+          )} />
+        </div>
       </div>
     );
   }

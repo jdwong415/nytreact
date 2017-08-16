@@ -3,9 +3,6 @@ var router = express.Router();
 var Article = require('../models/article');
 var path = require('path');
 
-var keys = require("../keys.js");
-var apiKey = process.env.NYT_API || keys.nytApi.key;
-
 router.get("/api/saved", function(req, res) {
   Article.find({}).exec(function(err, doc) {
     if (err) console.log(err);
@@ -16,12 +13,14 @@ router.get("/api/saved", function(req, res) {
 router.post("/api/saved", function(req, res) {
   var newArticle = req.body;
   newArticle = Article(newArticle);
-  newArticle.save(function(err) {
+  newArticle.save(function(err, doc) {
     if (err) {
       console.log(err);
+      res.send(err);
     }
     else {
       console.log("Article saved");
+      res.send(doc);
     }
   });
 });
