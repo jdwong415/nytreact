@@ -105,7 +105,7 @@ var Main = React.createClass({
           </div>
         </div>
         <div className="row">
-          <Route path="/" render={(props) => (
+          <Route exact path="/" render={(props) => (
             <Search {...props}
               setVars={this.setVars}
               searchResults={this.state.searchResults}
